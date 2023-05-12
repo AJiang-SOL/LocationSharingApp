@@ -1,16 +1,23 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<div class="columns is-mobile is-centered">
+  <div class=" box column is-half">
+    <userform></userform>
+  </div>
+</div>
+
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import userform from './components/form.vue'
+
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+
+  components:{
+    userform
+  },
 }
 </script>
 
