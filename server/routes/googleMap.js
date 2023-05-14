@@ -11,9 +11,9 @@ USERDIC = {}
 
 router.post("/", async (req,res)=>{
     const userInfo = req.body
-    console.log(userInfo)
+    if (userInfo.phoneNumber in USERDIC) return res.send(400)
     USERDIC[userInfo.phoneNumber] = [userInfo.fname, userInfo.lname]
-    console.log(USERDIC)
+    return res.send(200)
 });
 
 module.exports = router
