@@ -9,12 +9,11 @@
 </template>
 
 <script>
-import userform from './components/form.vue'
-
-
+import userform from './components/userForm.vue'
+import '@oruga-ui/theme-bulma/dist/bulma.css'
+import '@oruga-ui/oruga-next/dist/oruga-full-vars.css'
 export default {
   name: 'App',
-
   components:{
     userform
   },
