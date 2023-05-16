@@ -9,12 +9,15 @@
     "start": "npm run serve "
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.15.1",
     "@oruga-ui/oruga-next": "^0.6.0",
     "@oruga-ui/theme-bulma": "^0.2.10",
     "axios": "^1.4.0",
     "bulma": "^0.9.4",
     "core-js": "^3.8.3",
-    "vue": "^3.3.2"
+    "google-maps-js-api-loader": "^2.3.0",
+    "vue": "^3.3.2",
+    "vue3-google-map": "^0.15.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
