@@ -8,7 +8,8 @@
         <o-field label="Last Name" message="">
           <o-input type="text" v-model="formVal.lname"></o-input>
         </o-field>
-        <o-field label="Phone Number" :message="numberError ? 'Invalid phone number' : ''" :variant="numberError ? 'danger' : ''">
+        <o-field label="Phone Number" :message="numberError ? 'Invalid phone number' : ''"
+          :variant="numberError ? 'danger' : ''">
           <o-input type="text" v-model="formVal.phoneNumber">
           </o-input>
         </o-field>
@@ -98,7 +99,16 @@ export default {
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
       }).catch((error) => {
-        alert(error)
+        this.share = false
+        if (error.code === error.PERMISSION_DENIED) {
+          alert('Permission denied');
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          alert('Position unavailable');
+        } else if (error.code === error.TIMEOUT) {
+          alert('Timeout');
+        } else {
+          alert('An unknown error occurred')
+        }
       })
       if (position) {
         this.formVal.location.lat = position.coords.latitude
