@@ -58,6 +58,7 @@ export default {
       share: ref(false)
     }
   },
+  // watch the switch for updates
   watch: {
     share(update) {
       if (update === true) {
@@ -67,16 +68,19 @@ export default {
   },
   methods: {
     async submitForm() {
-      //check for valid phone number
+      /// edge cases
+      //check for location sharing enable
       if (this.share === false) {
         return
       }
+      //check for valid phone number
       if (!(/^\d+$/.test(this.formVal.phoneNumber) && this.formVal.phoneNumber.length == 10)) {
         this.numberError = true
         return
       }
+      //main case
       this.loader = true
-      await this.getLocation()
+      await this.getLocation() //wait
       //send info to sever
       axios.post("http://localhost:6099/maps", this.formVal
       ).then((response) => {
@@ -95,6 +99,7 @@ export default {
       this.formVal.lname = null
       this.formVal.phoneNumber = null
     },
+    //get lat and long 
     async getLocation() {
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)

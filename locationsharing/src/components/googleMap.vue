@@ -45,11 +45,13 @@ export default defineComponent({
                 label: 'Address'
             },
         ])
+        // reactive update for objects
         const state = reactive({
             allLocation: {},
             userInfo: {},
             tableData: []
         });
+        // async/await to get all the info
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:6099/maps')

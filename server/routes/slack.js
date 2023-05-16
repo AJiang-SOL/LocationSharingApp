@@ -8,7 +8,6 @@ async function sendMessageToSlack(message) {
       },
       body: JSON.stringify({ text: message })
     });
-
     if (response.ok) {
       console.log('Message sent to Slack');
     } else {

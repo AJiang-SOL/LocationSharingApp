@@ -8,6 +8,8 @@ const router = express.Router();
 USERDIC = {}
 //list of lat and lng for markers
 MARKERDIC = {}
+
+//post new user to dic
 router.post("/", async (req,res)=>{
     const userInfo = req.body
     if (userInfo.phoneNumber in USERDIC) return res.sendStatus(200)
@@ -24,6 +26,7 @@ router.post("/", async (req,res)=>{
     })
 })
 
+//get all the users and their locations
 router.get("/", async (req,res)=>{
     res.send({MARKERDIC,USERDIC})
 })
