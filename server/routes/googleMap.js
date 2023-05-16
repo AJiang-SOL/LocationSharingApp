@@ -1,7 +1,7 @@
 const express = require("express");
+const slack = require("./slack.js");
+const sendMessageToSlack = require("./slack.js");
 const router = express.Router();
-
-
 
 //Could use database
 //Dictionary of users dic[Number] = (first name, last name, address)
@@ -16,9 +16,14 @@ router.post("/", async (req,res)=>{
     MARKERDIC[userInfo.phoneNumber] = {lat: lat ,lng: lng}
     fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyBD0dirUoiHMG-LiLDqJ4-ZloDzV1DueKg')
     .then((response) => response.json())
-    .then((json) => USERDIC[userInfo.phoneNumber] = {fname: userInfo.fname, lname: userInfo.lname, address: json.plus_code.compound_code.split(" ").slice(1,4).join(" ")})
-    return res.sendStatus(200)
-});
+    .then((json) =>{
+        const address = json.plus_code.compound_code.split(" ").slice(1,4).join(" ")
+        USERDIC[userInfo.phoneNumber] = {fname: userInfo.fname, lname: userInfo.lname, address: address}
+        sendMessageToSlack(` Logged new user: (${userInfo.fname} ${userInfo.lname}: ${address}) `)
+        return res.sendStatus(200)
+    })
+})
+
 router.get("/", async (req,res)=>{
     res.send({MARKERDIC,USERDIC})
 })

@@ -4,8 +4,8 @@
         <MarkerCluster>
             <Marker v-for="(item, key) in state.allLocation" :options="{ position: item }" :key="key">
                 <InfoWindow>
-                    {{ state.userInfo[key].fname}}
-                    {{ state.userInfo[key].lname}}: 
+                    {{ state.userInfo[key].fname }}
+                    {{ state.userInfo[key].lname }}:
                     {{ state.userInfo[key].address }}
                 </InfoWindow>
             </Marker>
@@ -25,7 +25,7 @@ import { defineComponent, reactive, ref } from "vue"
 import { GoogleMap, Marker, MarkerCluster, InfoWindow } from "vue3-google-map"
 import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 export default defineComponent({
-    components: { GoogleMap, Marker, MarkerCluster, OTable, OTableColumn , InfoWindow },
+    components: { GoogleMap, Marker, MarkerCluster, OTable, OTableColumn, InfoWindow },
     setup() {
         const center = { lat: -28.024, lng: 140.887 }
         const columns = ref([
@@ -36,7 +36,7 @@ export default defineComponent({
             {
                 field: 'lname',
                 label: 'Last Name'
-            },{
+            }, {
                 field: 'number',
                 label: 'phone number'
             },
@@ -50,17 +50,22 @@ export default defineComponent({
             userInfo: {},
             tableData: []
         });
-        axios.get('http://localhost:6099/maps').then(res => {
-            state.allLocation = res.data.MARKERDIC
-            state.userInfo = res.data.USERDIC
-            for (const [key, value] of Object.entries(res.data.USERDIC)){
-                value.number = key
-                state.tableData.push(value) 
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:6099/maps')
+                state.allLocation = response.data.MARKERDIC;
+                state.userInfo = response.data.USERDIC;
+                for (const [key, value] of Object.entries(response.data.USERDIC)) {
+                    value.number = key;
+                    state.tableData.push(value);
+                }
+            } catch (error) {
+                alert(error);
             }
-        }).catch(error => {
-            alert(error)
-        })
+        }
+        fetchData()
+        console.log(state)
         return { center, state, columns }
-    },
-});
+    }
+})
 </script>

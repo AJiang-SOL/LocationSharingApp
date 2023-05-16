@@ -1,26 +1,33 @@
 <template>
-  <section>
-    <o-field label="First Name" message="">
-      <o-input type="text" v-model="formVal.fname"> </o-input>
-    </o-field>
-
-    <o-field label="Last Name" message="">
-      <o-input type="text" v-model="formVal.lname"></o-input>
-    </o-field>
-    <o-field label="Phone Number">
-      <o-input type="text" v-model="formVal.phoneNumber">
-      </o-input>
-    </o-field>
-    <o-field>
-      <o-switch v-model="share">Share Location</o-switch>
-    </o-field>
-    <o-button @click="submitForm">Submit</o-button>
-  </section>
+  <div v-if="showComponent" class="columns is-mobile is-centered">
+    <div class=" box column is-half">
+      <section>
+        <o-field label="First Name" message="">
+          <o-input type="text" v-model="formVal.fname"> </o-input>
+        </o-field>
+        <o-field label="Last Name" message="">
+          <o-input type="text" v-model="formVal.lname"></o-input>
+        </o-field>
+        <o-field label="Phone Number" :message="numberError ? 'Invalid phone number' : ''" :variant="numberError ? 'danger' : ''">
+          <o-input type="text" v-model="formVal.phoneNumber">
+          </o-input>
+        </o-field>
+        <o-field>
+          <o-switch v-model="share">Share Location</o-switch>
+        </o-field>
+        <o-button @click="submitForm">Submit</o-button>
+      </section>
+    </div>
+  </div>
+  <googleMap v-if="!showComponent"></googleMap>
+  <o-loading :full-page="isFullPage" v-model:active="loader" :can-cancel="true">
+  </o-loading>
 </template>
 
 <script>
 import axios from 'axios'
-import { OField, OInput, OButton, OSwitch } from '@oruga-ui/oruga-next'
+import googleMap from './googleMap.vue'
+import { OField, OInput, OButton, OSwitch, OLoading } from '@oruga-ui/oruga-next'
 import { ref } from 'vue'
 export default {
   name: "userForm",
@@ -28,7 +35,9 @@ export default {
     OField,
     OInput,
     OButton,
-    OSwitch
+    OSwitch,
+    OLoading,
+    googleMap
   },
   data() {
     return {
@@ -41,8 +50,10 @@ export default {
           lat: null
         },
       },
+      loader: false,
       numberError: false,
       success: false,
+      showComponent: true,
       share: ref(false)
     }
   },
@@ -54,30 +65,29 @@ export default {
     }
   },
   methods: {
-     async submitForm() {
-      console.log(this.formVal)
+    async submitForm() {
       //check for valid phone number
-      if (this.share === false){
+      if (this.share === false) {
         return
-      } 
+      }
       if (!(/^\d+$/.test(this.formVal.phoneNumber) && this.formVal.phoneNumber.length == 10)) {
         this.numberError = true
         return
       }
+      this.loader = true
       await this.getLocation()
-      console.log(this.formVal)
       //send info to sever
       axios.post("http://localhost:6099/maps", this.formVal
       ).then((response) => {
         console.log(response)
-
+        this.showComponent = false
         this.numberError = false
+        this.success = true
+        this.resetForm()
+        this.loader = false
       }).catch((error) => {
         alert(error)
       })
-      // Reset the form
-      this.success = true
-      this.resetForm()
     },
     resetForm() {
       this.formVal.fname = null
