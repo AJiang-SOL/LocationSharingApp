@@ -1,5 +1,6 @@
 async function sendMessageToSlack(message) {
-  const slackEndpoint = 'AIzaSyBD0dirUoiHMG-LiLDqJ4-ZloDzV1DueKg';
+  //GET ENDPOINT FROM SLACK.COM
+  const slackEndpoint = '';
   try {
     const response = await fetch(slackEndpoint, {
       method: 'POST',
