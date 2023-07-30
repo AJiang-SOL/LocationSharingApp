@@ -16,7 +16,8 @@ router.post("/", async (req,res)=>{
     let lat = userInfo.location.lat
     let lng = userInfo.location.long
     MARKERDIC[userInfo.phoneNumber] = {lat: lat ,lng: lng}
-    fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=AIzaSyBD0dirUoiHMG-LiLDqJ4-ZloDzV1DueKg')
+    //GET API KEY!
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key=API_KEY')
     .then((response) => response.json())
     .then((json) =>{
         const address = json.plus_code.compound_code.split(" ").slice(1,4).join(" ")
